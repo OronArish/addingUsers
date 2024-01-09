@@ -5,7 +5,7 @@
 
   vars_prompt:
     - name: target_user
-      prompt: "Enter the username: "
+      prompt: "Enter the username:"
 
   tasks:
     - name: Check if the user exists
@@ -18,10 +18,17 @@
         msg: "User {{ target_user }} already exists."
       when: user_check.rc == 0
 
-    - name: Create new group
+    - name: Check if group already exists
+      command: getent group freshgroup
+      register: group_check
+      ignore_errors: true
+
+    - name: Create new group if not exists
       ansible.builtin.group:
         name: freshgroup
         state: present
+      when: group_check.rc != 0
+      notify: create_group
 
     - name: Add user if new
       ansible.builtin.user:
@@ -35,3 +42,8 @@
     - name: add_user
       ansible.builtin.user:
         name: "{{ target_user }}"
+
+    - name: create_group
+      ansible.builtin.group:
+        name: freshgroup
+        state: present
