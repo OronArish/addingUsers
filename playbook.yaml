@@ -18,7 +18,7 @@
     - name: Inform user if already exists
       debug:
         msg: "User {{ target_user }} already exists."
-      when: user_check.rc == 0
+      when: user_check.status == 0
 
     - name: Create new group
       ansible.builtin.group:
