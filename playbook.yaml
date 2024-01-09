@@ -9,9 +9,7 @@
 
   tasks:
     - name: Check if the user exists
-      ansible.builtin.getent:
-        database: passwd
-        key: "{{ target_user }}"
+      command: id "{{ target_user }}"
       register: user_check
       ignore_errors: true
 
