@@ -4,9 +4,9 @@
 
   tasks:
     - name: Prompt for username
-      ansible.builtin.vars_prompt:
-        name: target_user
-        prompt: "Enter the username: "
+      vars_prompt:
+        - name: target_user
+          prompt: "Enter the username: "
 
     - name: Prompt for password
       ansible.builtin.password:
