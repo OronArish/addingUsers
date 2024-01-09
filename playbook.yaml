@@ -1,0 +1,39 @@
+---
+- name: Add user to Group
+  hosts: web01
+  become: yes
+
+  vars_prompt:
+    - name: target_user
+      prompt: "Enter the username: "
+
+  tasks:
+    - name: Check if the user exists
+      ansible.builtin.getnet:
+        database: passwd
+        key: "{{ target_user }}"
+      register: user_check
+      ignore_errors: true
+
+    - name: Inform user if already exists
+      debug:
+        msg: "User {{ target_user }} already exists."
+      when: user_check.rc == 0
+
+    - name: Create new group
+      ansible.builtin.group:
+        name: freshgroup
+        state: present
+
+    - name: Add user if new
+      ansible.builtin.user:
+        name: "{{ target_user }}"
+        state: present
+        groups: "freshgroup"
+      when: user_check.rc != 0
+      notify: add_user
+
+  handlers:
+    - name: add_user
+      ansible.builtin.user:
+        name: "{{ target_user }}"
