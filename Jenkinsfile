@@ -8,8 +8,7 @@ pipeline {
     }
 
     environment {
-        ANSIBLE_HOME = "${WORKSPACE}/addingUsers/ansible" // Adjust if Ansible files are in a folder named 'ansible'
-        ANSIBLE_EXECUTABLE = "${ANSIBLE_HOME}/ansible-playbook"
+        ANSIBLE_HOME = "${WORKSPACE}/addingUsers/ansible" // Adjust if Ansible files are in a folder named 'ansible' within 'addingUsers'
     }
 
     stages {
@@ -18,18 +17,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/OronArish/addingUsers.git'
             }
         }
-
-        stage('Debug') {
-                    steps {
-                        script {
-                            sh 'ls -la ${WORKSPACE}/addingUsers'
-                            sh 'ls -la ${WORKSPACE}/addingUsers/ansible'
-                            sh 'cat ${WORKSPACE}/addingUsers/ansible/playbook.yaml'
-                            sh 'cat ${WORKSPACE}/addingUsers/ansible/inventory.yaml'
-                        }
-                    }
-                }
-
 
         stage('Build with Maven') {
             steps {
@@ -43,8 +30,8 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    // Assuming your Ansible files are in the 'ansible' directory
-                    sh "${ANSIBLE_EXECUTABLE} -i ${ANSIBLE_HOME}/inventory.yaml ${ANSIBLE_HOME}/playbook.yaml"
+                    // Assuming your Ansible files are in the 'ansible' directory within 'addingUsers'
+                    sh "${ANSIBLE_HOME}/ansible-playbook -i ${ANSIBLE_HOME}/ansible/inventory.yaml ${ANSIBLE_HOME}/ansible/playbook.yaml"
                 }
             }
         }
