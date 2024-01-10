@@ -20,8 +20,11 @@ pipeline {
 
              stage('Build with Maven') {
                  steps {
-                     // Your Maven build commands here
-                     sh 'mvn -f addingUsers clean install'
+                     dir('addingUsers') {
+                         script {
+                             sh 'mvn clean install'
+                         }
+                     }
                  }
              }
 
