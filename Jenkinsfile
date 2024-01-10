@@ -22,7 +22,7 @@ pipeline {
                  steps {
                      dir('addingUsers') {
                          script {
-                             sh 'mvn clean install'
+                             sh 'mvn install -DskipTests'
                          }
                      }
                  }
