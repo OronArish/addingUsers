@@ -9,6 +9,7 @@ pipeline {
 
     environment {
         ANSIBLE_HOME = "${WORKSPACE}/addingUsers/ansible" // Adjust if Ansible files are in a folder named 'ansible'
+        ANSIBLE_EXECUTABLE = "${ANSIBLE_HOME}/ansible-playbook"
     }
 
     stages {
@@ -31,9 +32,7 @@ pipeline {
             steps {
                 script {
                     // Assuming your Ansible files are in the 'ansible' directory
-                    dir("${ANSIBLE_HOME}") {
-                        sh './ansible-playbook -i inventory.yaml playbook.yaml'
-                    }
+                    sh "${ANSIBLE_EXECUTABLE} -i ${ANSIBLE_HOME}/inventory.yaml ${ANSIBLE_HOME}/playbook.yaml"
                 }
             }
         }
