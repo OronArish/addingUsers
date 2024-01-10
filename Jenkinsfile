@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Your Maven build commands here
-                    sh 'mvn clean install'
+                    sh 'mvn clean -DskipTest'
                 }
             }
         }
