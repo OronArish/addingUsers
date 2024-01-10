@@ -19,6 +19,18 @@ pipeline {
             }
         }
 
+        stage('Debug') {
+                    steps {
+                        script {
+                            sh 'ls -la ${WORKSPACE}/addingUsers'
+                            sh 'ls -la ${WORKSPACE}/addingUsers/ansible'
+                            sh 'cat ${WORKSPACE}/addingUsers/ansible/playbook.yaml'
+                            sh 'cat ${WORKSPACE}/addingUsers/ansible/inventory.yaml'
+                        }
+                    }
+                }
+
+
         stage('Build with Maven') {
             steps {
                 script {
