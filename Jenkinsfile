@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Assuming your Ansible files are in the 'ansible' directory within 'addingUsers'
-                    sh "${ANSIBLE_HOME}/ansible-playbook -i ${ANSIBLE_HOME}/ansible/inventory.yaml ${ANSIBLE_HOME}/ansible/playbook.yaml"
+                    sh "cd ${ANSIBLE_HOME} && ansible-playbook -i ${ANSIBLE_HOME}/inventory.yaml ${ANSIBLE_HOME}/playbook.yaml"
                 }
             }
         }
