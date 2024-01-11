@@ -30,12 +30,12 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    // Assuming your Ansible files are in the 'ansible' directory within 'addingUsers'
-                    sh "cd ${ANSIBLE_HOME} && ansible-playbook -i ${ANSIBLE_HOME}/inventory.yaml ${ANSIBLE_HOME}/playbook.yaml"
+                    withEnv(["PATH+ANSIBLE=${tool 'Ansible'}/bin"]) {
+                        sh 'ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml'
+                    }
                 }
             }
         }
-    }
 
     post {
         success {
