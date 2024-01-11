@@ -22,6 +22,19 @@ pipeline {
             }
         }
 
+        stage('Check Ansible installation') {
+                    steps {
+                        script {
+                            // Check if Ansible is installed
+                            def ansibleInstalled = sh(script: 'command -v ansible', returnStatus: true)
+                            if (ansibleInstalled != 0) {
+                                // Install Ansible if not installed
+                                sh 'sudo apt update && sudo apt install software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install ansible'
+                            }
+                        }
+                    }
+                }
+
         stage('Deploy with Ansible') {
             steps {
                 script {
