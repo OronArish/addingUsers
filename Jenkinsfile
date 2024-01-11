@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven "MAVEN3"
         jdk "OracleJDK11"
-        ansible "Ansible" // Ensure this matches the configured tool name
+        ansible "Ansible" // Make sure this matches the tool name configured in Jenkins
     }
 
     stages {
@@ -25,7 +25,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    sh '/var/lib/jenkins/tools/hudson.plugins.ansible.AnsibleInstallation/Ansible/bin/ansible-playbook -i /var/lib/jenkins/workspace/adding-users-pipeline/addingUsers/ansible/inventory.yaml /var/lib/jenkins/workspace/adding-users-pipeline/addingUsers/ansible/playbook.yaml'
+                    sh 'ansible-playbook -i addingUsers/ansible/inventory.yaml addingUsers/ansible/playbook.yaml'
                 }
             }
         }
