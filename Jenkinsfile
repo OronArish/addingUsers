@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven "MAVEN3"
         jdk "OracleJDK11"
-        ansible "${WORKSPACE}/addingUsers/ansible"
+        ansible "Ansible" // Ensure this matches the configured tool name
     }
 
     environment {
