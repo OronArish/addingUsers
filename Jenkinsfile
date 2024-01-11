@@ -38,7 +38,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    sh 'cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml'
+                    sh 'cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml -e "ansible_ssh_common_args=-o StrictHostKeyChecking=no"'
                 }
             }
         }
