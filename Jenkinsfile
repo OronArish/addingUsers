@@ -23,22 +23,32 @@ pipeline {
         }
 
         stage('Check Ansible installation') {
-                    steps {
-                        script {
-                            // Check if Ansible is installed
-                            def ansibleInstalled = sh(script: 'command -v ansible', returnStatus: true)
-                            if (ansibleInstalled != 0) {
-                                // Install Ansible if not installed
-                                sh 'sudo apt update && sudo apt install -y software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible'
-                            }
-                        }
+            steps {
+                script {
+                    // Check if Ansible is installed
+                    def ansibleInstalled = sh(script: 'command -v ansible', returnStatus: true)
+                    if (ansibleInstalled != 0) {
+                        // Install Ansible if not installed
+                        sh 'sudo apt update && sudo apt install -y software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible'
                     }
                 }
+            }
+        }
+
+        stage('Configure Ansible') {
+            steps {
+                script {
+                    // Create ansible.cfg file with host_key_checking set to False
+                    sh 'echo "[defaults]\nhost_key_checking = False" > ansible.cfg'
+                }
+            }
+        }
 
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    sh 'cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml -e "ansible_ssh_common_args=-o StrictHostKeyChecking=no"'
+                    // Run Ansible playbook with custom ansible.cfg
+                    sh 'cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ANSIBLE_CONFIG=./ansible.cfg ansible-playbook -i inventory.yaml playbook.yaml'
                 }
             }
         }
