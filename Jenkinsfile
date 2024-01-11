@@ -30,9 +30,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    withEnv(["PATH+ANSIBLE=${tool 'Ansible'}/bin"]) {
-                        sh 'ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml'
-                    }
+                    sh 'ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml'
                 }
             }
         }
