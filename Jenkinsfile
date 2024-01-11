@@ -38,7 +38,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    sh 'ansible-playbook -i addingUsers/ansible/inventory.yaml addingUsers/ansible/playbook.yaml'
+                    sh 'cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml'
                 }
             }
         }
