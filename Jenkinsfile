@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven "MAVEN3"
         jdk "OracleJDK11"
-        // You can add Ansible tool here if needed
+        ansible "Ansible"
     }
 
     environment {
@@ -36,6 +36,7 @@ pipeline {
                 }
             }
         }
+    }
 
     post {
         success {
