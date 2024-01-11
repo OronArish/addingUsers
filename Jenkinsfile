@@ -7,10 +7,6 @@ pipeline {
         ansible "Ansible" // Ensure this matches the configured tool name
     }
 
-    environment {
-        ANSIBLE_HOME = "${WORKSPACE}/addingUsers/ansible"
-    }
-
     stages {
         stage('Fetch code') {
             steps {
@@ -29,9 +25,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    withEnv(["PATH+ANSIBLE=${tool 'Ansible'}/bin"]) {
-                        sh 'ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml'
-                    }
+                    sh '/var/lib/jenkins/tools/hudson.plugins.ansible.AnsibleInstallation/Ansible/bin/ansible-playbook -i /var/lib/jenkins/workspace/adding-users-pipeline/addingUsers/ansible/inventory.yaml /var/lib/jenkins/workspace/adding-users-pipeline/addingUsers/ansible/playbook.yaml'
                 }
             }
         }
