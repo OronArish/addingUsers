@@ -4,11 +4,11 @@ pipeline {
     tools {
         maven "MAVEN3"
         jdk "OracleJDK11"
-        ansible "Ansible"
+        ansible "${WORKSPACE}/addingUsers/ansible"
     }
 
     environment {
-        ANSIBLE_HOME = "${WORKSPACE}/addingUsers/ansible" // Adjust if Ansible files are in a folder named 'ansible' within 'addingUsers'
+        ANSIBLE_HOME = "${WORKSPACE}/addingUsers/ansible"
     }
 
     stages {
@@ -21,7 +21,6 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 script {
-                    // Your Maven build commands here
                     sh 'mvn clean -DskipTest'
                 }
             }
@@ -30,7 +29,9 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    sh 'ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml'
+                    withEnv(["PATH+ANSIBLE=${tool 'Ansible'}/bin"]) {
+                        sh 'ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml'
+                    }
                 }
             }
         }
