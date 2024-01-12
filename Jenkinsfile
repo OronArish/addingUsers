@@ -23,17 +23,17 @@ pipeline {
         }
 
         stage('Check Ansible installation') {
-                    steps {
-                        script {
-                            // Check if Ansible is installed
-                            def ansibleInstalled = sh(script: 'command -v ansible', returnStatus: true)
-                            if (ansibleInstalled != 0) {
-                                // Install Ansible if not installed
-                                sh 'sudo apt update && sudo apt install -y software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible'
-                            }
-                        }
+            steps {
+                script {
+                    // Check if Ansible is installed
+                    def ansibleInstalled = sh(script: 'command -v ansible', returnStatus: true)
+                    if (ansibleInstalled != 0) {
+                        // Install Ansible if not installed
+                        sh 'sudo apt update && sudo apt install -y software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible'
                     }
                 }
+            }
+        }
 
         stage('Deploy with Ansible') {
             steps {
@@ -43,7 +43,8 @@ pipeline {
                     sh "cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml --extra-vars \"target_user=${targetUser}\""
                 }
             }
-      }
+        }
+    }
 
     post {
         success {
