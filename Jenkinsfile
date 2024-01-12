@@ -41,10 +41,10 @@ pipeline {
                     def userInput = input(
                         id: 'userInput',
                         message: 'Enter the username:',
-                        parameters: [string(defaultValue: '', description: 'Username to add')]
+                        parameters: [string(name: 'TARGET_USER', defaultValue: '', description: 'Username to add')]
                     )
 
-                    def targetUser = userInput.trim()
+                    def targetUser = userInput.TARGET_USER.trim()
 
                     sh "cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml --extra-vars \"target_user=${targetUser}\""
                 }
