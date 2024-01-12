@@ -4,4 +4,4 @@ all:
     web01:
       ansible_host: 172.31.33.248
       ansible_user: ec2-user
-      ansible_ssh_private_key_file: clientkey.pem
+      ansible_ssh_private_key_file: /var/lib/jenkins/workspace/adding-users-pipeline/ansible/clientkey.pem
