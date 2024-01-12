@@ -3,10 +3,8 @@
   hosts: web01
   become: yes
 
-  vars_prompt:
-    - name: target_user
-      prompt: "Enter the username"
-      private: no
+  vars:
+    target_user: "{{ target_user | default('default_user') }}"
 
   tasks:
     - name: Check if the user exists
