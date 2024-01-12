@@ -54,7 +54,8 @@ pipeline {
                     }
                 }
             }
-    }
+        }
+    } // <- Added this closing brace
 
     post {
         success {
