@@ -45,9 +45,9 @@ pipeline {
                     )
 
                     // Extract the value of TARGET_USER directly from userInput
-                    def targetUser = params.userInput != null ? params.userInput.trim() : null
+                    def targetUser = userInput ? userInput.trim() : null
 
-                    if (targetUser != null && !targetUser.isEmpty()) {
+                    if (targetUser && !targetUser.isEmpty()) {
                         sh "cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml --extra-vars \"target_user=${targetUser}\""
                     } else {
                         error("TARGET_USER is null or empty. Please provide a valid value.")
