@@ -45,7 +45,7 @@ pipeline {
                     )
 
                     // Extract the value of TARGET_USER directly from userInput
-                    def targetUser = userInput.getProperty('TARGET_USER').trim()
+                    def targetUser = params.userInput.trim()
 
                     sh "cd /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i inventory.yaml playbook.yaml --extra-vars \"target_user=${targetUser}\""
                 }
