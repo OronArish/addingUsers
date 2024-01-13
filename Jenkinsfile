@@ -5,7 +5,6 @@ pipeline {
         maven "MAVEN3"
         jdk "OracleJDK11"
         ansible "Ansible"
-        sonarqube "sonar4.7"
     }
 
     stages {
@@ -64,8 +63,11 @@ pipeline {
             }
 
             stage('SonarQube Analysis') {
+                environment {
+                    scannerHome = tool 'sonar4.7'
+                }
                 steps {
-                    withSonarQubeEnv('sonar4.7') {
+                    withSonarQubeEnv('sonar') {
                         sh '''${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey= addUsersProject\
                             -Dsonar.projectName=addUsersProject \
