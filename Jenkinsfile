@@ -76,7 +76,7 @@ pipeline {
                             -Dsonar.java.binaries=addingUsers/target/test-classes/com/visualpathit/account/controllerTest/ \
                             -Dsonar.junit.reportsPath=addingUsers/target/surefire-reports/ \
                             -Dsonar.jacoco.reportsPath=addingUsers/target/jacoco.exec \
-                            -Dsonar.java.checkstyle.reportPaths=addingUsers/target/checkstyle-result.xml"""
+                            -Dsonar.java.checkstyle.reportPaths=addingUsers/target/checkstyle-result.xml'''
                     }
                 }
             }
