@@ -72,11 +72,11 @@ pipeline {
                             -Dsonar.projectKey=addUsersProject \
                             -Dsonar.projectName=addUsersProject \
                             -Dsonar.projectVersion=1.0 \
-                            -Dsonar.sources=addingUsers/src/ \
-                            -Dsonar.java.binaries=addingUsers/target/test-classes/com/visualpathit/account/controllerTest/ \
-                            -Dsonar.junit.reportsPath=addingUsers/target/surefire-reports/ \
-                            -Dsonar.jacoco.reportsPath=addingUsers/target/jacoco.exec \
-                            -Dsonar.java.checkstyle.reportPaths=addingUsers/target/checkstyle-result.xml'''
+                            -Dsonar.sources=${WORKSPACE}/addingUsers/src/ \
+                            -Dsonar.java.binaries=${WORKSPACE}/addingUsers/target/test-classes/com/visualpathit/account/controllerTest/ \
+                            -Dsonar.junit.reportsPath=${WORKSPACE}/addingUsers/target/surefire-reports/ \
+                            -Dsonar.jacoco.reportsPath=${WORKSPACE}/addingUsers/target/jacoco.exec \
+                            -Dsonar.java.checkstyle.reportPaths=${WORKSPACE}/addingUsers/target/checkstyle-result.xml'''
                     }
                 }
             }
