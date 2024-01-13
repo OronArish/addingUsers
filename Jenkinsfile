@@ -116,11 +116,6 @@ pipeline {
                                 docker-compose-plugin
                         '''
 
-                        // Function to check if the Jenkins user is in the docker group
-                        def isUserInDockerGroup() {
-                            return sh(script: 'groups jenkins | grep -q docker', returnStatus: true) == 0
-                        }
-
                         // Check if Jenkins user is already in the docker group
                         if (!isUserInDockerGroup()) {
                             // Add Jenkins user to the docker group
@@ -149,4 +144,9 @@ pipeline {
             echo 'Pipeline failed! Implement error handling or notifications.'
         }
     }
+}
+
+def isUserInDockerGroup() {
+    // Function to check if the Jenkins user is in the docker group
+    return sh(script: 'groups jenkins | grep -q docker', returnStatus: true) == 0
 }
