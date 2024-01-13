@@ -69,14 +69,14 @@ pipeline {
                 steps {
                     withSonarQubeEnv('sonar') {
                         sh '''${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=addUsersProject\
+                            -Dsonar.projectKey=addUsersProject \
                             -Dsonar.projectName=addUsersProject \
                             -Dsonar.projectVersion=1.0 \
-                            -Dsonar.sources=src/ \
-                            -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                            -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+                            -Dsonar.sources=addingUsers/src/ \
+                            -Dsonar.java.binaries=addingUsers/target/test-classes/com/visualpathit/account/controllerTest/ \
+                            -Dsonar.junit.reportsPath=addingUsers/target/surefire-reports/ \
+                            -Dsonar.jacoco.reportsPath=addingUsers/target/jacoco.exec \
+                            -Dsonar.java.checkstyle.reportPaths=addingUsers/target/checkstyle-result.xml"""
                     }
                 }
             }
