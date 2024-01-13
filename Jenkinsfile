@@ -65,7 +65,7 @@ pipeline {
 
             stage('SonarQube Analysis') {
                 steps {
-                    withSonarQubeEnv('sonar-pro') {
+                    withSonarQubeEnv('sonar4.7') {
                         sh '''${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey= addUsersProject\
                             -Dsonar.projectName=addUsersProject \
