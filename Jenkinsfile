@@ -125,7 +125,7 @@ pipeline {
                             echo 'Jenkins user added to the docker group. Restarting Jenkins agent...'
 
                             // Restart the Jenkins agent
-                            sh 'sudo systemctl restart jenkins-agent.service'
+                            sh 'sudo systemctl restart jenkins.service'
                         } else {
                             // Inform the user that a restart is not required
                             echo 'Jenkins user is already in the docker group. No restart required.'
