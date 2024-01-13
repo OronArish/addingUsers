@@ -84,6 +84,59 @@ pipeline {
                     }
                 }
             }
+
+            stage('Install Docker') {
+                steps {
+                        script {
+                            def dockerInstalled = sh(script: 'command -v docker', returnStatus: true)
+
+                            if (dockerInstalled != 0) {
+                                sh '''
+                                    sudo apt-get update &&
+                                    sudo apt-get install -y \
+                                        ca-certificates \
+                                        curl \
+                                        gnupg \
+                                        software-properties-common
+
+                                    sudo install -m 0755 -d /etc/apt/keyrings &&
+                                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg &&
+                                    sudo chmod a+r /etc/apt/keyrings/docker.gpg &&
+
+                                    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                                        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+                                        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+                                    sudo apt-get update &&
+                                    sudo apt-get install -y \
+                                        docker-ce \
+                                        docker-ce-cli \
+                                        containerd.io \
+                                        docker-buildx-plugin \
+                                        docker-compose-plugin
+                                '''
+
+                                // Function to check if the Jenkins user is in the docker group
+                                def isUserInDockerGroup() {
+                                    return sh(script: 'groups jenkins | grep -q docker', returnStatus: true) == 0
+                                }
+
+                                // Check if Jenkins user is already in the docker group
+                                if (!isUserInDockerGroup()) {
+                                    // Add Jenkins user to the docker group
+                                    sh 'sudo usermod -aG docker jenkins'
+
+                                    // Inform the user about the need to restart the Jenkins agent
+                                    echo 'Jenkins user added to the docker group. Restarting Jenkins agent...'
+
+                                    // Restart the Jenkins agent
+                                    sh 'sudo systemctl restart jenkins-agent.service'
+                                } else {
+                                    // Inform the user that a restart is not required
+                                    echo 'Jenkins user is already in the docker group. No restart required.'
+                                }
+                            }
+                        }
         }
 
         post {
