@@ -31,10 +31,8 @@ pipeline {
         stage('Check Ansible installation') {
             steps {
                 script {
-                    // Check if Ansible is installed
                     def ansibleInstalled = sh(script: 'command -v ansible', returnStatus: true)
                     if (ansibleInstalled != 0) {
-                        // Install Ansible if not installed
                         sh 'sudo apt update && sudo apt install -y software-properties-common && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install -y ansible'
                     }
                 }
@@ -50,7 +48,6 @@ pipeline {
                         parameters: [string(name: 'TARGET_USER', defaultValue: '', description: 'Username to add')]
                     )
 
-                    // Extract the value of TARGET_USER directly from userInput
                     def targetUser = userInput ? userInput.trim() : null
 
                     if (targetUser && !targetUser.isEmpty()) {
@@ -58,35 +55,6 @@ pipeline {
                     } else {
                         error("TARGET_USER is null or empty. Please provide a valid value.")
                     }
-                }
-            }
-        }
-
-        stage('Checkstyle Analysis') {
-            steps {
-                sh 'mvn checkstyle:checkstyle'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'sonar4.7'
-            }
-            steps {
-                withSonarQubeEnv('sonar') {
-                    sh '''${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=addUsersProject \
-                            -Dsonar.projectName=addUsersProject \
-                            -Dsonar.projectVersion=1.0 \
-                            -Dsonar.sources=/var/lib/jenkins/workspace/adding-users-pipeline/addingUsers/ \
-                            -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                            -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
-                }
-
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -122,18 +90,11 @@ pipeline {
                                 docker-compose-plugin
                         '''
 
-                        // Check if Jenkins user is already in the docker group
                         if (!isUserInDockerGroup()) {
-                            // Add Jenkins user to the docker group
                             sh 'sudo usermod -aG docker jenkins'
-
-                            // Inform the user about the need to restart the Jenkins agent
                             echo 'Jenkins user added to the docker group. Restarting Jenkins agent...'
-
-                            // Restart the Jenkins agent
                             sh 'sudo systemctl restart jenkins.service'
                         } else {
-                            // Inform the user that a restart is not required
                             echo 'Jenkins user is already in the docker group. No restart required.'
                         }
                     }
@@ -144,18 +105,44 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker_registry', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                script {
-                    // Build docker image
-                    sh 'docker build -t $DOCKER_REGISTRY/$DOCKER_REPO:$DOCKER_TAG .'
-                    // Log in to docker registry
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
-                    // Push Docker image
-                    sh 'docker push $DOCKER_REGISTRY/$DOCKER_REPO:$DOCKER_TAG'
+                    script {
+                        sh 'docker build -t $DOCKER_REGISTRY/$DOCKER_REPO:$DOCKER_TAG .'
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
+                        sh 'docker push $DOCKER_REGISTRY/$DOCKER_REPO:$DOCKER_TAG'
+                    }
+                }
+            }
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'sonar4.7'
+            }
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh '''${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=addUsersProject \
+                            -Dsonar.projectName=addUsersProject \
+                            -Dsonar.projectVersion=1.0 \
+                            -Dsonar.sources=/var/lib/jenkins/workspace/adding-users-pipeline/addingUsers/ \
+                            -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                            -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+                }
+
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
-}
 
     post {
         success {
@@ -168,6 +155,5 @@ pipeline {
 }
 
 def isUserInDockerGroup() {
-    // Function to check if the Jenkins user is in the docker group
     return sh(script: 'groups jenkins | grep -q docker', returnStatus: true) == 0
 }
