@@ -7,6 +7,12 @@ pipeline {
         ansible "Ansible"
     }
 
+    environment {
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REPO = 'oronops/adding-users-app'
+        DOCKER_TAG = 'latest'
+    }
+
     stages {
         stage('Fetch code') {
             steps {
@@ -134,7 +140,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker_registry', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                script {
+                    // Build docker image
+                    sh 'docker build -t $DOCKER_REGISTRY/$DOCKER_REPO:$DOCKER_TAG .'
+                    // Log in to docker registry
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
+                    // Push Docker image
+                    sh 'docker push $DOCKER_REGISTRY/$DOCKER_REPO:$DOCKER_TAG'
+                }
+            }
+        }
     }
+}
 
     post {
         success {
