@@ -10,7 +10,7 @@ RUN apt-get update && \
 COPY ansible/playbook.yaml /ansible/playbook.yaml
 COPY ansible/inventory.yaml /ansible/inventory.yaml
 COPY ansible/clientkey.pem /root/.ssh/id_rsa
-COPY ~/.ssh/known_hosts /root/.ssh/known_hosts
+COPY /var/lib/jenkins/.ssh/known_hosts /root/.ssh/known_hosts
 
 WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
