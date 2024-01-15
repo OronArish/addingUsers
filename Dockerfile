@@ -13,12 +13,10 @@ COPY ansible/clientkey.pem /root/.ssh/id_rsa
 
 WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
-# Copy known_hosts to a temporary location
-COPY /var/lib/jenkins/.ssh/known_hosts /tmp/known_hosts
-
-# Move known_hosts to the desired location
+# Add known_hosts entries dynamically during build
+ARG KNOWN_HOSTS_ENTRIES
 RUN mkdir -p /root/.ssh && \
-    mv /tmp/known_hosts /root/.ssh/known_hosts && \
+    echo "$KNOWN_HOSTS_ENTRIES" > /root/.ssh/known_hosts && \
     chmod 600 /root/.ssh/id_rsa && \
     chown -R root:root /root/.ssh
 
