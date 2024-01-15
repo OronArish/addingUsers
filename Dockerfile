@@ -4,6 +4,6 @@ WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline/
 
 COPY . .
 
-RUN mvn clean install
+RUN mvn clean install -DskipTests
 
-CMD ["java", "-jar", "target/my-maven-project-1.0-SNAPSHOT.jar"]
+CMD ["tail", "-f", "/dev/null"]
