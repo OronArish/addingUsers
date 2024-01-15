@@ -9,9 +9,11 @@ RUN apt-get update && \
 # Copy your Ansible playbook into the container
 COPY ansible/playbook.yaml /ansible/playbook.yaml
 COPY ansible/inventory.yaml /ansible/inventory.yaml
+COPY ansible/clientkey.pem /root/.ssh/id_rsa
 
 WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
 # Run the Ansible playbook on container startup
-CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
+RUN chmod 600 /root/.ssh/id_rsa
+CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars \"target_user=${targetUser}\""]
 
