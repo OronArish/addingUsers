@@ -1,9 +1,9 @@
-FROM maven:3.6.3-jdk-11
+FROM ubuntu:latest
 
-WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline/
+# Copy your Ansible playbook into the container
+COPY ansible/playbook.yml /playbook.yml
 
-COPY . .
+WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
-RUN mvn clean install -DskipTests
-
-CMD ["tail", "-f", "/dev/null"]
+# Run the Ansible playbook on container startup
+CMD ["ansible-playbook", "/playbook.yml"]
