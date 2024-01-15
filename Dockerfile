@@ -19,7 +19,8 @@ COPY /var/lib/jenkins/.ssh/known_hosts /tmp/known_hosts
 # Move known_hosts to the desired location
 RUN mkdir -p /root/.ssh && \
     mv /tmp/known_hosts /root/.ssh/known_hosts && \
-    chmod 600 /root/.ssh/id_rsa
+    chmod 600 /root/.ssh/id_rsa && \
+    chown -R root:root /root/.ssh
 
 # Run the Ansible playbook on container startup
 CMD ["ansible-playbook", "-i", "/ansible/inventory.yaml", "/ansible/playbook.yaml", "--extra-vars", "target_user=${targetUser}"]
