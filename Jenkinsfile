@@ -20,13 +20,13 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
-            steps {
-                script {
-                    sh 'mvn clean -DskipTest'
-                }
-            }
-        }
+//         stage('Build with Maven') {
+//             steps {
+//                 script {
+//                     sh 'mvn clean -DskipTest'
+//                 }
+//             }
+//         }
 
         stage('Check Ansible installation') {
             steps {
