@@ -13,12 +13,6 @@ COPY ansible/clientkey.pem /root/.ssh/id_rsa
 
 WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
-# Add known_hosts entries dynamically during build
-ARG KNOWN_HOSTS_ENTRIES
-RUN mkdir -p /root/.ssh && \
-    echo "$KNOWN_HOSTS_ENTRIES" > /root/.ssh/known_hosts && \
-    chmod 600 /root/.ssh/id_rsa && \
-    chown -R root:root /root/.ssh
-
 # Run the Ansible playbook on container startup
 CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
+
