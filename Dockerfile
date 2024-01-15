@@ -6,4 +6,4 @@ COPY ansible/playbook.yml /playbook.yml
 WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
 # Run the Ansible playbook on container startup
-CMD ["ansible-playbook", "/playbook.yml"]
+CMD ["ansible-playbook", "/ansible/playbook.yaml"]
