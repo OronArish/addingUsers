@@ -21,4 +21,4 @@ RUN mkdir -p /root/.ssh && \
     chown -R root:root /root/.ssh
 
 # Run the Ansible playbook on container startup
-CMD ["ansible-playbook", "-i", "/ansible/inventory.yaml", "/ansible/playbook.yaml", "--extra-vars", "target_user=${targetUser}"]
+CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
