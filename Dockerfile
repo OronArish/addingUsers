@@ -6,20 +6,16 @@ RUN apt-get update && \
     apt-get install -y ansible && \
     rm -rf /var/lib/apt/lists/*
 
+# Set the working directory
 WORKDIR /var/lib/jenkins/workspace/adding-users-pipeline
 
-# Create SSH directory and copy key and known_hosts
-RUN mkdir -p /root/.ssh
-COPY known_hosts /root/.ssh/known_hosts
-COPY ansible/clientkey.pem /root/.ssh/id_rsa
-
-# Set correct permissions
-RUN chmod 700 /root/.ssh && \
-    chmod 600 /root/.ssh/id_rsa
-
-# Copy your Ansible playbook into the container
+# Copy the Ansible playbook and inventory into the container
 COPY ansible/playbook.yaml /ansible/playbook.yaml
 COPY ansible/inventory.yaml /ansible/inventory.yaml
+COPY ansible/clientkey.pem /var/lib/jenkins/workspace/adding-users-pipeline/clientkey.pem
+
+# Copy the SSH key to the .ssh directory
+COPY clientkey.pem /root/.ssh/id_rsa
 
 # Run the Ansible playbook on container startup
 CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
