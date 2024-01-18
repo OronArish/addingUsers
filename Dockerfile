@@ -21,6 +21,5 @@ COPY ansible/known_hosts /root/.ssh/known_hosts
 RUN chmod 600 /root/.ssh/id_rsa \
     && chmod 644 /root/.ssh/known_hosts
 
-CMD ["sh", "-c", "ls -l /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
 # Run the Ansible playbook on container startup
-CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
+CMD ["sh", "-c", "ls -l /var/lib/jenkins/workspace/adding-users-pipeline/ansible && ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
