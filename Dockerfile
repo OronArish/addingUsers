@@ -14,19 +14,12 @@ COPY ansible/playbook.yaml /ansible/playbook.yaml
 COPY ansible/inventory.yaml /ansible/inventory.yaml
 
 # Copy SSH key and known_hosts file
-COPY ansible/clientkey.pem /ansible/clientkey.pem
-COPY ansible/known_hosts /ansible/known_hosts
-
-# Change ownership and permissions
-RUN chown -R root:root /ansible && \
-    chmod 600 /ansible/clientkey.pem && \
-    chmod 644 /ansible/known_hosts
-
-# Copy the SSH key to the .ssh directory
 COPY ansible/clientkey.pem /root/.ssh/id_rsa
+COPY ansible/known_hosts /root/.ssh/known_hosts
 
-# Change ownership and permissions
-RUN chmod 600 /root/.ssh/id_rsa
+# Set permissions for SSH key and known hosts
+RUN chmod 600 /root/.ssh/id_rsa \
+    && chmod 644 /root/.ssh/known_hosts
 
 # Run the Ansible playbook on container startup
 CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
