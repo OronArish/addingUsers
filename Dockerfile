@@ -20,5 +20,6 @@ COPY ansible/known_hosts /var/lib/jenkins/workspace/adding-users-pipeline/ansibl
 # Copy the SSH key to the .ssh directory
 COPY ansible/clientkey.pem /root/.ssh/id_rsa
 
+RUN mkdir -p /root/.ssh && ssh-keyscan 172.31.33.248 >> /root/.ssh/known_hosts
 # Run the Ansible playbook on container startup
 CMD ["sh", "-c", "ansible-playbook -i /ansible/inventory.yaml /ansible/playbook.yaml --extra-vars 'target_user=${targetUser}'"]
