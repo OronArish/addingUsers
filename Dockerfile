@@ -14,7 +14,7 @@ COPY ansible/playbook.yaml /ansible/playbook.yaml
 COPY ansible/inventory.yaml /ansible/inventory.yaml
 
 # Copy SSH key and known_hosts file
-COPY ansible/clientkey.pem /var/lib/jenkins/workspace/adding-users-pipeline/ansible/clientkey.pem
+COPY ansible/clientkey.pem /root/.ssh/id_rsa
 COPY ansible/known_hosts /root/.ssh/known_hosts
 
 # Set permissions for SSH key and known hosts
