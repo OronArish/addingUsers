@@ -22,4 +22,4 @@ RUN chmod 600 /root/.ssh/id_rsa \
     && chmod 644 /root/.ssh/known_hosts
 
 # Run the Ansible playbook on container startup
-CMD ["sh", "-c", "ls -l ansible && ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml --extra-vars 'target_user=$TARGET_USER'"]
+CMD ["sh", "-c", "ls -l ansible && ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml --extra-vars \"target_user=$TARGET_USER\""]
