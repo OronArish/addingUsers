@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: addingUsers
-          image: adding-users-image:latest
+          image: oronops/adding-users-image:latest
           ports:
             - containerPort: 80
           resources:
