@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: addingUsers-deployment
+  labels:
+    app: addingUsers
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: addingUsers
+  template:
+    metadata:
+      labels:
+        app: addingUsers
+    spec:
+      containers:
+        - name: addingUsers
+          image: adding-users-image:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          imagePullPolicy: Always
