@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: addingUsers-deployment
+  name: addingusers-deployment
   labels:
     app: addingUsers
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: addingUsers
+      app: addingusers
   template:
     metadata:
       labels:
-        app: addingUsers
+        app: addingusers
     spec:
       containers:
-        - name: addingUsers
+        - name: addingusers
           image: oronops/adding-users-image:latest
           ports:
             - containerPort: 80
